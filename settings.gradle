@@ -1,0 +1,2 @@
+rootProject.name='nonLoseEdit'
+include ':app'
