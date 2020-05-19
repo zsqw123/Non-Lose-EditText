@@ -1,7 +1,8 @@
 package qhaty.edittext
 
-import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -9,7 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -17,7 +18,7 @@ class MainActivity : Activity() {
         if (!filesDir!!.exists()) filesDir.mkdirs()
         val file = File(filesDir.absolutePath, "auto")
         if (!file.exists()) file.createNewFile()
-        val nbEdit = NBEdit(main_tv, getDao("test")) {
+        val nbEdit = NBEdit(main_tv, getDao("test"), this) {
             val text = main_tv.text.toString()
             GlobalScope.launch(Dispatchers.IO) { file.writeText(text) }
         }
@@ -42,6 +43,10 @@ class MainActivity : Activity() {
                 nbEdit.undo()
                 lockUndo = false
             }
+        }
+        bt_copy.setOnClickListener {
+            toClipboard(main_tv.text.toString())
+            Toast.makeText(this, "复制成功", Toast.LENGTH_SHORT).show()
         }
     }
 }
