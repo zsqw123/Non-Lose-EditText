@@ -3,6 +3,7 @@ package qhaty.edittext
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.widget.Toast
 import java.util.*
 
 
@@ -25,3 +26,5 @@ fun Context.toClipboard(text: String, label: String = "label") {
     val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     cm.setPrimaryClip(ClipData.newPlainText(label, text))
 }
+
+fun Context.toast(string: String) = Toast.makeText(this, string, Toast.LENGTH_SHORT).show()

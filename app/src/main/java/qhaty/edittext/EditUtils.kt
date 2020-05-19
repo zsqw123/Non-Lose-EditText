@@ -4,10 +4,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import androidx.lifecycle.LifecycleOwner
-import kotlinx.coroutines.*
-import java.lang.Exception
-import java.util.*
-import kotlin.collections.ArrayList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 open class NBEdit(
     private val editText: EditText,

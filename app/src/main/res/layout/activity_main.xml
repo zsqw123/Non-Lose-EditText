@@ -27,6 +27,13 @@
             android:text="复制" />
 
         <Button
+            android:id="@+id/bt_del"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="删库" />
+
+        <Button
             android:id="@+id/bt_undo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

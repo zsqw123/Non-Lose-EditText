@@ -1,7 +1,8 @@
 package qhaty.edittext
 
 import android.os.Bundle
-import android.widget.Toast
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,8 @@ class MainActivity : AppCompatActivity() {
         if (!filesDir!!.exists()) filesDir.mkdirs()
         val file = File(filesDir.absolutePath, "auto")
         if (!file.exists()) file.createNewFile()
-        val nbEdit = NBEdit(main_tv, getDao("test"), this) {
+        val daoTest = getDao("test")
+        val nbEdit = NBEdit(main_tv, daoTest, this) {
             val text = main_tv.text.toString()
             GlobalScope.launch(Dispatchers.IO) { file.writeText(text) }
         }
@@ -46,7 +48,30 @@ class MainActivity : AppCompatActivity() {
         }
         bt_copy.setOnClickListener {
             toClipboard(main_tv.text.toString())
-            Toast.makeText(this, "复制成功", Toast.LENGTH_SHORT).show()
+            toast("复制成功")
+        }
+        bt_del.setOnClickListener {
+            val dialog = AlertDialog.Builder(this)
+            dialog.setTitle("输入\"删除\"确认删除")
+            val edit = EditText(this)
+            dialog.setView(edit)
+            dialog.setPositiveButton("删除") { _, _ ->
+                if (edit.text.toString() != "删除" && edit.text.toString() != "shanchu") {
+                    toast("请输入\"删除\"来确认删除")
+                } else {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        toast("开始删除")
+                        dialog.setCancelable(false)
+                        withContext(Dispatchers.IO) {
+                            daoTest.delAllRedo()
+                            daoTest.delAllUndo()
+                        }
+                        toast("删除完毕")
+                        dialog.setCancelable(true)
+                    }
+                }
+            }
+            dialog.show()
         }
     }
 }
