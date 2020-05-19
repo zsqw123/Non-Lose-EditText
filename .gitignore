@@ -19,3 +19,8 @@
 /gradle/
 /app/release/
 /app/libs/
+/.settings/
+/app/.settings/
+/app/.project
+/app/.classpath
+/.project
