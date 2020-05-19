@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         if (!filesDir!!.exists()) filesDir.mkdirs()
         val file = File(filesDir.absolutePath, "auto")
         if (!file.exists()) file.createNewFile()
-        val daoTest = getDao("test")
+        val daoTest = getStackDao("test")
         val nbEdit = NBEdit(main_tv, daoTest, this) {
             val text = main_tv.text.toString()
             GlobalScope.launch(Dispatchers.IO) { file.writeText(text) }

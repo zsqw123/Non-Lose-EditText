@@ -84,6 +84,6 @@ abstract class NBTextDatabase : RoomDatabase() {
     abstract val nbTextDao: NBTextDao
 }
 
-fun Context.getDao(dbName: String): NBTextDao =
+fun Context.getStackDao(dbName: String): NBTextDao =
     Room.databaseBuilder(this, NBTextDatabase::class.java, dbName).allowMainThreadQueries()
         .build().nbTextDao
