@@ -121,7 +121,6 @@ open class NBEdit(
                 val charSequence = s.subSequence(start, end)
                 //删除了文字
                 if (charSequence.isNotEmpty()) {
-//                    val action = Action(charSequence, start, false)
                     val action = NBTextUndo(charSequence.toString(), start, false)
                     if (count > 1) {
                         //如果一次超过一个字符，说明用户选择了，然后替换或者删除操作
@@ -133,11 +132,8 @@ open class NBEdit(
                     //还有一种情况:选择一个字符,然后删除(暂时没有考虑这种情况)
                     GlobalScope.launch(Dispatchers.IO) {
                         dao.insert(action)
-//                        action.insertActionToDB(dao, true)
                         dao.delAllRedo()
                     }
-//                    historyUndo.push(action)
-//                    historyRedo.clear()
                     action.index = ++index
                 }
             }

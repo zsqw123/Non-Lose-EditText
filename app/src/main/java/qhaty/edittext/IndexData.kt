@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Entity
-data class IndexData(
-    var str: String, var title: String,
-    @PrimaryKey(autoGenerate = true) var id: Int? = null
-)
+data class IndexData(@PrimaryKey var title: String, var str: String)
 
 @Dao
 interface IndexDataDao {
@@ -21,7 +18,7 @@ interface IndexDataDao {
     @Update
     fun update(vararg indexData: IndexData)
 
-    @Query("select * from indexdata order by id")
+    @Query("select * from indexdata")
     fun getAllIndex(): LiveData<List<IndexData>>
 }
 
