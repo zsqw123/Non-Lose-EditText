@@ -3,6 +3,8 @@ package qhaty.edittext
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * @param actionTarget 改变字符
@@ -84,6 +86,7 @@ abstract class NBTextDatabase : RoomDatabase() {
     abstract val nbTextDao: NBTextDao
 }
 
-fun Context.getStackDao(dbName: String): NBTextDao =
-    Room.databaseBuilder(this, NBTextDatabase::class.java, dbName).allowMainThreadQueries()
+suspend fun Context.getStackDao(dbName: String): NBTextDao = withContext(Dispatchers.IO) {
+    Room.databaseBuilder(this@getStackDao, NBTextDatabase::class.java, dbName)
         .build().nbTextDao
+}

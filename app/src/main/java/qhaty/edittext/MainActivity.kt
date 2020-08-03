@@ -5,29 +5,22 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var vm: MainModel
+    private var nbEdit: NBEdit? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        val filesDir = getExternalFilesDir("save")
-//        if (!filesDir!!.exists()) filesDir.mkdirs()
-//        val file = File(filesDir.absolutePath, "auto")
-//        if (!file.exists()) file.createNewFile()
 
-        var indexList = listOf<IndexData>()
-//        var currentIndex: IndexData? = null
-        val indexDao = getIndexDao()
-        indexDao.getAllIndex().observe(this, Observer {
-            indexList = it
-        })
-        var nbEdit: NBEdit? = null
         fun chageNBEdit(new: NBTextDao) {
-            nbEdit = NBEdit(main_tv, new, this) {
-                val title = edit_title.text.toString()
+            vm.getNBEdit(main_tv, this) {
+                var title = edit_title.text.toString()
+                if (title.isBlank()) title = "默认"
                 val text = main_tv.text.toString()
                 GlobalScope.launch(Dispatchers.IO) {
                     for (i in indexList) {
@@ -45,9 +38,10 @@ class MainActivity : AppCompatActivity() {
             chageNBEdit(new)
         }
         chageNBEdit(currentNBDao)
-        for (i in indexList) {
+        for (i in vm.indexList) {
             if (i.title == "默认") {
                 nbEdit?.setDefaultText(i.str)
+                break
             }
         }
         var lockRedo = false
@@ -153,5 +147,15 @@ class MainActivity : AppCompatActivity() {
                 dialog.show()
             }
         }
+    }
+
+    fun initViewModel() {
+        vm = ViewModelProvider(this).get(MainModel::class.java)
+        vm.indexDao.getAllIndex().observe(this, Observer {
+            vm.indexList = it
+        })
+        vm.nbEdit.observe(this, Observer {
+            nbEdit = it
+        })
     }
 }
